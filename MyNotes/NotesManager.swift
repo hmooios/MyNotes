@@ -15,7 +15,7 @@ class NotesManager:ObservableObject{
     }
     
     func addNote(title:String,content:String){
-        let newNote = Note(title: title, content: content)
+        let newNote = Note(date: Date(), title: title, content: content)
         notes.append(newNote)
         encodeNote()
     }
