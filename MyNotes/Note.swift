@@ -9,8 +9,9 @@ import Foundation
 
 struct Note:Codable,Identifiable{
     var id=UUID()
+    var date:Date
     var title:String
     var content:String
     
-    static let example = Note(title: "Unknown title", content: "Unknown content")
+    static let example = Note(date: Date(), title: "Unknown title", content: "Unknown content")
 }
