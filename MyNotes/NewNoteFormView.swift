@@ -15,22 +15,36 @@ struct NewNoteFormView: View {
     @State private var content = ""
     @Environment(\.dismiss) var dismiss
     @State private var showAlert=false
+    @State private var selectedCategory = "Personal"
+    let categories = ["Personal", "Education", "Finance", "Work", "Others"]
+    var categorySelectionHandler: ((String) -> Void)?
+
     
     var body: some View {
         NavigationView{
             Form{
                 Section{
                     TextField("Title", text: $title)
-                    TextEditor(text: $content)
+                    Picker("Category", selection: $selectedCategory) {
+                                   ForEach(categories, id: \.self) { category in
+                                       Text(category)
+                                   }
+                               }
+                               .pickerStyle(MenuPickerStyle())
+                               .padding()
+                               
+                   TextField("Wrtie something...", text: $content)
+
                 }
                 Section{
                     Button("Save") {
                         
-                        if content.isEmpty || title.isEmpty{
+                        if title.isEmpty{
                             showAlert=true
                         }else{
                             let newNote = Note(date: Date(), title: title, content: content)
                             notesManager.notes.append(newNote)
+                            categorySelectionHandler?(selectedCategory) // Call the closure
                             dismiss()
                         }
                     }
