@@ -1,10 +1,11 @@
+
+
 //
 //  ContentView.swift
 //  MyNotes
 //
 //  Created by Hmoo Myat Theingi on 20/11/2023.
 //
-
 import SwiftUI
 
 struct ContentView: View {
@@ -13,25 +14,25 @@ struct ContentView: View {
     @State private var isEditing = false
     @State private var selectedCategory: String?
 
+
     var body: some View {
         NavigationView {
             List {
                 ForEach(notesManager.notes) { note in
                     NavigationLink(destination: NoteDetailView(note: note)) {
                         VStack(alignment:.leading){
-                            HStack{
-                                if let category = selectedCategory {
-                                    Image(systemName: categorySymbol(category))
-                                        .foregroundColor(.secondary)
-                                }
+                            
                                 Text(note.title)
-                            }
+                            
                             Text(note.date, formatter: dateFormatter)
                                 .foregroundColor(.secondary)
                         }
                     }
                 }
-                .onDelete(perform: deleteEntry)
+                .onDelete{indexSet in
+                    notesManager.deleteNote(at: indexSet.first!)
+                    
+                }
             }
 
             .navigationTitle("My notes")
@@ -53,7 +54,7 @@ struct ContentView: View {
             }
             .sheet(isPresented: $isShowingNewNoteFormView) {
                 NewNoteFormView(notesManager: notesManager, isShowingNewNoteFormView: $isShowingNewNoteFormView,
-                                categorySelectionHandler: { selectedCategory in
+                                categorySelectionHandler: { selectedCategory  in
                                     self.selectedCategory = selectedCategory
                                 }
                 )
@@ -72,18 +73,9 @@ struct ContentView: View {
         notesManager.notes.remove(atOffsets: index)
     }
 
-    private func categorySymbol(_ category: String) -> String {
-        // Map category to SF Symbol
-        switch category {
-        case "Personal": return "person"
-        case "Education": return "graduationcap"
-        case "Finance": return "dollarsign.circle"
-        case "Work": return "briefcase"
-        case "Others": return "ellipsis"
-        default: return ""
-        }
+   
     }
-}
+
 
 
 #Preview {
