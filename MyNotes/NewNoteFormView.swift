@@ -42,8 +42,8 @@ struct NewNoteFormView: View {
                         if title.isEmpty{
                             showAlert=true
                         }else{
-                            let newNote = Note(date: Date(), title: title, content: content)
-                            notesManager.notes.append(newNote)
+                            let newNote = Note(title: title, content: content, date: Date(), category: selectedCategory)
+                            notesManager.addNote(newNote)
                             categorySelectionHandler?(selectedCategory) // Call the closure
                             dismiss()
                         }
